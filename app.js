@@ -22,6 +22,13 @@ app.use(
 // ROUTES
 app.use("/api/auth", authRouter);
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Islamic Platform API is running",
+  });
+});
+
 const startServer = async () => {
   try {
     await connectDB();
