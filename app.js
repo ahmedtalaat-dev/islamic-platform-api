@@ -1,9 +1,38 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 require("dotenv").config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const connectDB = require("./config/db");
+const authRouter = require("./routes/authRouter");
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port:${PORT}`);
-});
+const app = express();
+
+const PORT = process.env.PORT || 5000;
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
+// ROUTES
+app.use("/api/auth", authRouter);
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
