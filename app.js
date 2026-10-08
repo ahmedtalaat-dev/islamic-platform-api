@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const authRouter = require("./routes/authRouter");
 
 const app = express();
 
@@ -15,17 +16,11 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     credentials: true,
-  })
+  }),
 );
 
 // ROUTES
-
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Islamic Platform API is running",
-  });
-});
+app.use("/api/auth", authRouter);
 
 const startServer = async () => {
   try {
