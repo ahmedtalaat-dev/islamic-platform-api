@@ -4,7 +4,9 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+
 const authRouter = require("./routes/authRouter");
+const hadithRouter = require("./routes/hadithRouter");
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.use(
 
 // ROUTES
 app.use("/api/auth", authRouter);
+app.use("/api/hadiths", hadithRouter);
 
 app.get("/", (req, res) => {
   res.json({
