@@ -1,27 +1,54 @@
+
 const Seerah = require("../models/seerahModel");
+const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 const path = require("path");
 
-const deleteImage = (filename) => {
-  if (!filename) return;
+const deleteImage = async (seerah) => {
+  if (!seerah?.image) return;
 
-  const imagePath = path.join(
-    __dirname,
-    "../uploads",
-    path.basename(filename)
-  );
+  // New Cloudinary images
+  if (seerah.imagePublicId) {
+    await cloudinary.uploader.destroy(seerah.imagePublicId);
+    return;
+  }
 
-  fs.unlink(imagePath, (err) => {
-    if (err && err.code !== "ENOENT") {
-      console.error("Failed to delete image:", err.message);
+  // Legacy images previously stored in the local uploads folder
+  if (!seerah.image.startsWith("http")) {
+    const imagePath = path.join(
+      __dirname,
+      "../uploads",
+      path.basename(seerah.image)
+    );
+
+    try {
+      await fs.promises.unlink(imagePath);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
     }
-  });
+  }
+};
+
+const cleanupUploadedImage = async (file) => {
+  if (!file?.filename) return;
+
+  try {
+    await cloudinary.uploader.destroy(file.filename);
+  } catch (error) {
+    console.error("Failed to clean up uploaded image:", error.message);
+  }
 };
 
 // CREATE
 exports.createSeerah = async (req, res) => {
   try {
-    const { title, description, content, category, readingTime } = req.body;
+    const {
+      title,
+      description,
+      content,
+      category,
+      readingTime,
+    } = req.body;
 
     if (!req.file) {
       return res.status(400).json({
@@ -35,17 +62,18 @@ exports.createSeerah = async (req, res) => {
       content,
       category,
       readingTime,
-      image: req.file.filename,
+      image: req.file.path,
+      imagePublicId: req.file.filename,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Seerah created successfully",
       data: seerah,
     });
   } catch (error) {
-    if (req.file) deleteImage(req.file.filename);
+    await cleanupUploadedImage(req.file);
 
-    res.status(400).json({
+    return res.status(400).json({
       message: error.message,
     });
   }
@@ -59,14 +87,18 @@ exports.getAllSeerah = async (req, res) => {
 
     if (category) filter.category = category;
 
-    const seerah = await Seerah.find(filter).sort({ createdAt: -1 });
+    const seerah = await Seerah.find(filter).sort({
+      createdAt: -1,
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
       results: seerah.length,
       data: seerah,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
@@ -81,9 +113,11 @@ exports.getSeerahById = async (req, res) => {
       });
     }
 
-    res.status(200).json({ data: seerah });
+    return res.status(200).json({ data: seerah });
   } catch (error) {
-    res.status(400).json({ message: "Invalid Seerah ID" });
+    return res.status(400).json({
+      message: "Invalid Seerah ID",
+    });
   }
 };
 
@@ -92,8 +126,9 @@ exports.updateSeerah = async (req, res) => {
   try {
     const updates = { ...req.body };
 
-    // Never accept a client-provided image path.
+    // Never accept image URLs or public IDs from the client.
     delete updates.image;
+    delete updates.imagePublicId;
 
     if (updates.readingTime !== undefined) {
       updates.readingTime = Number(updates.readingTime);
@@ -102,37 +137,53 @@ exports.updateSeerah = async (req, res) => {
     const oldSeerah = await Seerah.findById(req.params.id);
 
     if (!oldSeerah) {
-      if (req.file) deleteImage(req.file.filename);
+      await cleanupUploadedImage(req.file);
 
       return res.status(404).json({
         message: "Seerah article not found",
       });
     }
 
+    const updateData = {
+      ...updates,
+    };
+
+    if (req.file) {
+      updateData.image = req.file.path;
+      updateData.imagePublicId = req.file.filename;
+    }
+
     const updatedSeerah = await Seerah.findByIdAndUpdate(
       req.params.id,
-      {
-        ...updates,
-        ...(req.file && { image: req.file.filename }),
-      },
+      updateData,
       {
         new: true,
         runValidators: true,
       }
     );
 
+    // Delete the old image only after the database update succeeds.
     if (req.file && oldSeerah.image) {
-      deleteImage(oldSeerah.image);
+      try {
+        await deleteImage(oldSeerah);
+      } catch (error) {
+        console.error(
+          "Failed to delete old image:",
+          error.message
+        );
+      }
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Seerah updated successfully",
       data: updatedSeerah,
     });
   } catch (error) {
-    if (req.file) deleteImage(req.file.filename);
+    await cleanupUploadedImage(req.file);
 
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({
+      message: error.message,
+    });
   }
 };
 
@@ -147,12 +198,21 @@ exports.deleteSeerah = async (req, res) => {
       });
     }
 
-    if (seerah.image) deleteImage(seerah.image);
+    try {
+      await deleteImage(seerah);
+    } catch (error) {
+      console.error(
+        "Failed to delete stored image:",
+        error.message
+      );
+    }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Seerah deleted successfully",
     });
   } catch (error) {
-    res.status(400).json({ message: "Invalid Seerah ID" });
+    return res.status(400).json({
+      message: "Invalid Seerah ID",
+    });
   }
 };
