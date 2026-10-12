@@ -1,31 +1,28 @@
+
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const uploadDir = path.join(__dirname, "../uploads");
-
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-
-  filename: (req, file, cb) => {
-    const extension = path.extname(file.originalname).toLowerCase();
-    const filename = `${crypto.randomUUID()}${extension}`;
-
-    cb(null, filename);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "islamic-platform/seerah",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ];
+
+  if (allowedTypes.includes(file.mimetype)) {
     return cb(null, true);
   }
 
-  cb(new Error("Only image files are allowed"));
+  cb(new Error("Only JPEG, PNG, and WebP images are allowed"));
 };
 
 const upload = multer({
