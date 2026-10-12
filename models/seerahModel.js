@@ -35,8 +35,12 @@ const seerahSchema = new mongoose.Schema(
       type: String,
       required: [true, "Image is required"],
     },
+
+    imagePublicId: {
+      type: String,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Seerah", seerahSchema);
