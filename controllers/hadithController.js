@@ -13,7 +13,7 @@ const getHadiths = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch hadiths",
+      message: "فشل تحميل الأحاديث",
       error: error.message,
     });
   }
@@ -27,7 +27,7 @@ const getHadithById = async (req, res) => {
     if (!hadith) {
       return res.status(404).json({
         success: false,
-        message: "Hadith not found",
+        message: "الأحاديث غير موجودة",
       });
     }
 
@@ -38,7 +38,7 @@ const getHadithById = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch hadith",
+      message: "فشل تحميل الأحاديث",
       error: error.message,
     });
   }
@@ -59,7 +59,7 @@ const getHadithsByCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch hadiths",
+      message: "فشل تحميل الأحاديث",
       error: error.message,
     });
   }
@@ -77,13 +77,13 @@ const createHadith = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Hadith created successfully",
+      message: "تم إنشاء الحديث بنجاح",
       data: hadith,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to create hadith",
+      message: "فشل إنشاء الحديث",
       error: error.message,
     });
   }
@@ -109,19 +109,19 @@ const updateHadith = async (req, res) => {
     if (!hadith) {
       return res.status(404).json({
         success: false,
-        message: "Hadith not found",
+        message: "الحديث غير موجود",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Hadith updated successfully",
+      message: "تم تحديث الحديث بنجاح",
       data: hadith,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to update hadith",
+      message: "فشل تحديث الحديث",
       error: error.message,
     });
   }
@@ -135,18 +135,18 @@ const deleteHadith = async (req, res) => {
     if (!hadith) {
       return res.status(404).json({
         success: false,
-        message: "Hadith not found",
+        message: "الحديث غير موجود",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Hadith deleted successfully",
+      message: "تم حذف الحديث بنجاح",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to delete hadith",
+      message: "فشل حذف الحديث",
       error: error.message,
     });
   }
