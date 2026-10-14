@@ -16,16 +16,15 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cookieParser());
-const allowedOrigins = [
-  "http://localhost:3000",
-  process.env.FRONTEND_URL,
-].filter(Boolean);
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "http://localhost:3000",
     credentials: true,
-  })
+  }),
 );
 
 // ROUTES
@@ -38,7 +37,7 @@ app.use("/api/fatwa", fatwaRouter);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Islamic Platform API is running",
+    message: "مرحبا بك في تطبيقنا! نحن هنا لمساعدتك في رحلتك الروحية. استمتع بتجربة المستخدم.",
   });
 });
 
