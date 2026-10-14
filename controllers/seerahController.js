@@ -67,7 +67,7 @@ exports.createSeerah = async (req, res) => {
     });
 
     return res.status(201).json({
-      message: "Seerah created successfully",
+      message: "تم إنشاء المقالة بنجاح",
       data: seerah,
     });
   } catch (error) {
@@ -109,14 +109,14 @@ exports.getSeerahById = async (req, res) => {
 
     if (!seerah) {
       return res.status(404).json({
-        message: "Seerah article not found",
+        message: "المقالة غير موجودة",
       });
     }
 
     return res.status(200).json({ data: seerah });
   } catch (error) {
     return res.status(400).json({
-      message: "Invalid Seerah ID",
+      message: "معرف المقالة غير صالح",
     });
   }
 };
@@ -140,7 +140,7 @@ exports.updateSeerah = async (req, res) => {
       await cleanupUploadedImage(req.file);
 
       return res.status(404).json({
-        message: "Seerah article not found",
+        message: "المقالة غير موجودة",
       });
     }
 
@@ -175,7 +175,7 @@ exports.updateSeerah = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Seerah updated successfully",
+      message: "تم تحديث المقالة بنجاح",
       data: updatedSeerah,
     });
   } catch (error) {
@@ -194,7 +194,7 @@ exports.deleteSeerah = async (req, res) => {
 
     if (!seerah) {
       return res.status(404).json({
-        message: "Seerah article not found",
+        message: "المقالة غير موجودة",
       });
     }
 
@@ -208,11 +208,11 @@ exports.deleteSeerah = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "Seerah deleted successfully",
+      message: "تم حذف المقالة بنجاح",
     });
   } catch (error) {
     return res.status(400).json({
-      message: "Invalid Seerah ID",
+      message: "معرف المقالة غير صالح",
     });
   }
 };
