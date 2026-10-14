@@ -13,7 +13,7 @@ const getDhikrs = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch dhikrs",
+      message: "فشل تحميل الأذكار",
       error: error.message,
     });
   }
@@ -27,7 +27,7 @@ const getDhikrById = async (req, res) => {
     if (!dhikr) {
       return res.status(404).json({
         success: false,
-        message: "Dhikr not found",
+        message: "الذكر غير موجود",
       });
     }
 
@@ -38,7 +38,7 @@ const getDhikrById = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch dhikr   ",
+      message: "فشل تحميل الذكر",
       error: error.message,
     });
   }
@@ -59,7 +59,7 @@ const getDhikrsByCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch dhikrs",
+      message: "فشل تحميل الأذكار",
       error: error.message,
     });
   }
@@ -78,13 +78,13 @@ const createDhikr = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Dhikr created successfully",
+      message: "تم إنشاء الذكر بنجاح",
       data: dhikr,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to create dhikr",
+      message: "فشل في إنشاء الذكر",
       error: error.message,
     });
   }
@@ -111,19 +111,19 @@ const updateDhikr = async (req, res) => {
     if (!dhikr) {
       return res.status(404).json({
         success: false,
-        message: "Dhikr not found",
+        message: "الذكر غير موجود",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Dhikr updated successfully",
+      message: "تم تحديث الذكر بنجاح",
       data: dhikr,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to update dhikr",
+      message: "فشل في تحديث الذكر",
       error: error.message,
     });
   }
@@ -137,18 +137,18 @@ const deleteDhikr = async (req, res) => {
     if (!dhikr) {
       return res.status(404).json({
         success: false,
-        message: "Dhikr not found",
+        message: "الذكر غير موجود",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Dhikr deleted successfully",
+      message: "تم حذف الذكر بنجاح",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to delete dhikr",
+      message: "فشل في حذف الذكر",
       error: error.message,
     });
   }
