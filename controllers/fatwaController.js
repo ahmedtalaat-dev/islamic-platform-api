@@ -13,7 +13,7 @@ const getFatwas = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch fatwas",
+      message: "فشل تحميل الفتاوى",
       error: error.message,
     });
   }
@@ -27,7 +27,7 @@ const getFatwaById = async (req, res) => {
     if (!fatwa) {
       return res.status(404).json({
         success: false,
-        message: "Fatwa not found",
+        message: "الفتوى غير موجودة",
       });
     }
 
@@ -38,7 +38,7 @@ const getFatwaById = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch fatwa",
+      message: "فشل تحميل الفتوى",
       error: error.message,
     });
   }
@@ -59,7 +59,7 @@ const getFatwasByCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch fatwas",
+      message: "فشل تحميل الفتاوى",
       error: error.message,
     });
   }
@@ -79,13 +79,13 @@ const createFatwa = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Fatwa created successfully",
+      message: "تم إنشاء الفتوى بنجاح",
       data: fatwa,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to create fatwa",
+      message: "فشل في إنشاء الفتوى",
       error: error.message,
     });
   }
@@ -113,19 +113,19 @@ const updateFatwa = async (req, res) => {
     if (!fatwa) {
       return res.status(404).json({
         success: false,
-        message: "Fatwa not found",
+        message: "الفتوى غير موجودة",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Fatwa updated successfully",
+      message: "تم تحديث الفتوى بنجاح",
       data: fatwa,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Failed to update fatwa",
+      message: "فشل في تحديث الفتوى",
       error: error.message,
     });
   }
@@ -139,18 +139,18 @@ const deleteFatwa = async (req, res) => {
     if (!fatwa) {
       return res.status(404).json({
         success: false,
-        message: "Fatwa not found",
+        message: "الفتوى غير موجودة",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Fatwa deleted successfully",
+      message: "تم حذف الفتوى بنجاح",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to delete fatwa",
+      message: "فشل في حذف الفتوى",
       error: error.message,
     });
   }

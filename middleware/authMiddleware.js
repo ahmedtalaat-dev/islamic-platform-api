@@ -7,7 +7,7 @@ const protect = (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authenticated",
+        message: "التحقق من الهوية فشل",
       });
     }
 
@@ -18,7 +18,7 @@ const protect = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token",
+      message: "التحقق من الهوية فشل",
     });
   }
 };
