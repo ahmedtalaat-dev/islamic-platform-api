@@ -10,7 +10,7 @@ const login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required",
+        message: "الرجاء إدخال البريد الإلكتروني وكلمة المرور",
       });
     }
 
@@ -21,7 +21,7 @@ const login = async (req, res) => {
     if (!admin) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
       });
     }
 
@@ -30,7 +30,7 @@ const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
       });
     }
 
@@ -56,14 +56,14 @@ const login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Login successful",
+      message: "تسجيل الدخول ناجح",
     });
   } catch (error) {
     console.error("Login error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "خطأ في الخادم",
     });
   }
 };
@@ -75,7 +75,7 @@ const getMe = async (req, res) => {
     if (!admin) {
       return res.status(404).json({
         success: false,
-        message: "Admin not found",
+        message: "المشرف غير موجود",
       });
     }
 
@@ -88,12 +88,14 @@ const getMe = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "خطأ في الخادم",
     });
   }
 };
 
 const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
+  
   res.clearCookie("token", {
     httpOnly: true,
     secure: isProduction,
@@ -103,7 +105,7 @@ const logout = (req, res) => {
 
   return res.status(200).json({
     success: true,
-    message: "Logout successful",
+    message: "تسجيل الخروج ناجح",
   });
 };
 
