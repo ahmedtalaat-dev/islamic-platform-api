@@ -3,7 +3,7 @@ const Fatwa = require("../models/fatwaModel");
 // Get all fatwas
 const getFatwas = async (req, res) => {
   try {
-    const fatwas = await Fatwa.find().sort({ createdAt: -1 });
+    const fatwas = await Fatwa.find().sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,
@@ -49,7 +49,7 @@ const getFatwasByCategory = async (req, res) => {
   try {
     const fatwas = await Fatwa.find({
       category: req.params.category,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,

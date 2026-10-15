@@ -3,7 +3,7 @@ const Dhikr = require("../models/dhikrModel");
 // Get all dhikrs
 const getDhikrs = async (req, res) => {
   try {
-    const dhikrs = await Dhikr.find().sort({ createdAt: -1 });
+    const dhikrs = await Dhikr.find().sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,
@@ -49,7 +49,7 @@ const getDhikrsByCategory = async (req, res) => {
   try {
     const dhikrs = await Dhikr.find({
       category: req.params.category,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,

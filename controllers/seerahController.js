@@ -88,7 +88,7 @@ exports.getAllSeerah = async (req, res) => {
     if (category) filter.category = category;
 
     const seerah = await Seerah.find(filter).sort({
-      createdAt: -1,
+      createdAt: 1,
     });
 
     return res.status(200).json({
