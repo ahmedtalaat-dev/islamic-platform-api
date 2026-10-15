@@ -3,7 +3,7 @@ const Hadith = require("../models/hadithModel");
 // Get all hadiths
 const getHadiths = async (req, res) => {
   try {
-    const hadiths = await Hadith.find().sort({ createdAt: -1 });
+    const hadiths = await Hadith.find().sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,
@@ -49,7 +49,7 @@ const getHadithsByCategory = async (req, res) => {
   try {
     const hadiths = await Hadith.find({
       category: req.params.category,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: 1 });
 
     res.status(200).json({
       success: true,
